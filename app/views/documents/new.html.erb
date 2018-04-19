@@ -1,0 +1,167 @@
+<h1 class="text-center m-b-20">Create a new Document</h1>
+<%= form_for @document do |f| %>
+  
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3>Basic Information</h3>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <%= f.label :customer_name, :class => 'col-sm-4 col-form-label' %>
+            <div class="col-sm-8">
+              <%= f.text_field :customer_name, :class => 'form-control col-sm-10', :required => true %>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <%= f.label :designer_name, :class => 'col-sm-4 col-form-label' %>
+            <div class="col-sm-8">
+              <%= f.text_field :designer_name, :class => 'form-control col-sm-10', :required => true %>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <%= f.label :finish_name, :class => 'col-sm-4 col-form-label' %>
+            <div class="col-sm-8">
+              <%= f.text_field :finish_name, :class => 'form-control col-sm-10', :required => true %>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <%= f.label :designer_phone, :class => 'col-sm-4 col-form-label' %>
+            <div class="col-sm-8">
+              <%= f.text_field :designer_phone, :class => 'form-control col-sm-10', :required => true %>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <%= f.label :office_phone, :class => 'col-sm-4 col-form-label' %>
+            <div class="col-sm-8">
+              <%= f.text_field :office_phone, :class => 'form-control col-sm-10', :required => true %>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <%= f.label :designer_email, :class => 'col-sm-4 col-form-label' %>
+            <div class="col-sm-8">
+              <%= f.text_field :designer_email, :class => 'form-control col-sm-10', :required => true %>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <%= f.label :date, :class => 'col-sm-4 col-form-label' %>
+            <div class="col-sm-8">
+              <%= f.text_field :date, :class => 'form-control col-sm-10', :required => true %>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <%= f.label :image_for_the_first_page, :class => 'col-sm-6 col-form-label' %>
+            <div class="col-sm-8">
+              <%= f.file_field :first_image, :class => 'form-control col-sm-10' %>
+            </div>
+          </div>
+          <div class="form-group row">
+            <%= f.label :image_for_the_last_page, :class => 'col-sm-6 col-form-label' %> 
+            <div class="col-sm-8">
+              <%= f.file_field :last_image, :class => 'form-control col-sm-10' %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3>Custom pages</h3>
+    </div>
+    <div class="panel-body">
+      <div class="wrapper">
+        <div class="drop">
+          <div class="cont">
+            <i class="fa fa-cloud-upload"></i>
+            <div class="tit">
+              Drag & Drop
+            </div>
+            <div class="desc">
+              your files to Assets, or 
+            </div>
+            <div class="browse">
+              click here to browse
+            </div>
+          </div>
+          <output id="list"></output>
+          <input id="files" name="document[images][]" multiple="true" type="file" style="z-index: 10000" />
+        </div>
+      </div>
+
+      <script type="text/javascript">
+        var drop = $("#files");
+        drop.on('dragenter', function (e) {
+          $(".drop").css({
+            "border": "4px dashed #09f",
+            "background": "rgba(0, 153, 255, .05)"
+          });
+          $(".cont").css({
+            "color": "#09f"
+          });
+        }).on('dragleave dragend mouseout drop', function (e) {
+          $(".drop").css({
+            "border": "3px dashed #DADFE3",
+            "background": "transparent"
+          });
+          $(".cont").css({
+            "color": "#8E99A5"
+          });
+        });
+
+
+
+        function handleFileSelect(evt) {
+          var files = evt.target.files; // FileList object
+
+          var list_obj = document.getElementById('list')
+          while (list_obj.firstChild) {
+            list_obj.removeChild(list_obj.firstChild);
+          }
+
+          // Loop through the FileList and render image files as thumbnails.
+          for (var i = 0, f; f = files[i]; i++) {
+
+            // Only process image files.
+            if (!f.type.match('image.*')) {
+              continue;
+            }
+
+            var reader = new FileReader();
+
+            // Closure to capture the file information.
+            reader.onload = (function(theFile) {
+              return function(e) {
+                // Render thumbnail.
+                var span = document.createElement('span');
+                span.innerHTML = ['<img class="thumb" src="', e.target.result,
+                                  '" title="', escape(theFile.name), '"/>'].join('');
+                list_obj.insertBefore(span, null);
+              };
+            })(f);
+
+            // Read in the image file as a data URL.
+            reader.readAsDataURL(f);
+          }
+        }
+
+        $('#files').change(handleFileSelect);
+      </script>
+    </div>
+  </div>
+
+  <%= f.submit "Submit", :class => 'btn btn-success m-b-20' %>
+
+
+<% end %>

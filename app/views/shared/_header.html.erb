@@ -1,0 +1,11 @@
+<div class="header-panel">
+  <div>
+    <span><%= current_user.email %></span>
+    <%= link_to "Create", new_document_path %>
+    <%= link_to "Browse", root_path %>
+  </div>
+
+  <div>
+    <%= link_to "SignOut", destroy_user_session_path, method: :delete %>
+  </div>
+</div>

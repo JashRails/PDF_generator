@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TylerWillow</title>
+    <%= csrf_meta_tags %>
+    <script src="https://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+    <!-- The Canvas to Blob plugin is included for image resizing functionality -->
+    <script src="https://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+    
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body class="container-fluid">
+    <% if current_user.present? %>
+      <%= render partial: 'shared/header' %>
+    <% end %>
+    
+    <div class="container">
+      <div class="row">
+        <% if notice %>
+          <p class="notice"><%= notice %></p>
+        <% end %>
+        <% if alert %>
+          <p class="alert"><%= alert %></p>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="container">
+      <%= yield %>
+    </div>
+  </body>
+</html>
