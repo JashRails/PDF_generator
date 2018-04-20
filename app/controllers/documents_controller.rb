@@ -6,7 +6,7 @@ class DocumentsController < ApplicationController
   before_action :set_document, only: [:show]
 
   def index # show all templates
-    @documents = Document.all.order("CREATED_AT")
+    @documents = Document.where(user_id: current_user.id).order("CREATED_AT")
   end
 
   def new
@@ -15,6 +15,8 @@ class DocumentsController < ApplicationController
   
   def create
     new_document = Document.new(document_params)
+    new_document.user_id = current_user.id
+
     new_document.save
 
     puts "--- Creating PDF"
@@ -39,9 +41,9 @@ class DocumentsController < ApplicationController
       draw_text "Designed By: #{new_document.designer_name}", :at => [20, 702]
       draw_text "Finish Name: #{new_document.finish_name}", :at => [20, 680]
       draw_text "Designer Phone: #{new_document.designer_phone}", :at => [20, 658]
-      draw_text "Office Phone: #{new_document.customer_name}", :at => [20, 636]
-      draw_text "Designer Email: #{new_document.customer_name}", :at => [20, 614]
-      draw_text "Date: #{new_document.customer_name}", :at => [20, 592]
+      draw_text "Office Phone: #{new_document.office_phone}", :at => [20, 636]
+      draw_text "Designer Email: #{new_document.designer_email}", :at => [20, 614]
+      draw_text "Date: #{new_document.date}", :at => [20, 592]
 
       # 2 ~ Custom pages
       if new_document.images.present?

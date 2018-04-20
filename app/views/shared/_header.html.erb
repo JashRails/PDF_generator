@@ -3,6 +3,9 @@
     <span><%= current_user.email %></span>
     <%= link_to "Create", new_document_path %>
     <%= link_to "Browse", root_path %>
+    <% if current_user.is_admin == true %>
+      <%= link_to "Admin", rails_admin_path %>
+    <% end %>
   </div>
 
   <div>

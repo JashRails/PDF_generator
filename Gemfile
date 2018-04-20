@@ -17,6 +17,7 @@ gem 'sass-rails', '~> 5.0'
 gem 'bootstrap-sass', '~> 3.3.7'
 gem 'jquery-rails'
 gem 'jquery-fileupload-rails'
+gem 'momentjs-rails'
 
 
 # Use Uglifier as compressor for JavaScript assets
@@ -40,6 +41,7 @@ gem 'jbuilder', '~> 2.5'
 
 # Use Devise for authentication
 gem 'devise'
+gem 'rails_admin', '~> 1.3'
 
 # Custom PDF generation
 gem 'prawn', '~> 2.0.2'
