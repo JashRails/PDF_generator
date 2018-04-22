@@ -1,4 +1,4 @@
-<table class="table m-t-20" data-filtering="true" data-page-size="20" data-paging="true">
+<table class="table m-t-20" data-filtering="true" data-paging-size="12" data-paging="true">
   <thead>
     <tr>
       <th data-breakpoints="xs">ID</th>
@@ -17,7 +17,7 @@
         <td> <%= doc.designer_name %> </td>
         <td> <%= doc.designer_email %> </td>
         <td> <%= doc.date %> </td>
-        <td> <%= link_to "View", document_path(doc), target: "_blank", :class => "btn btn-xs btn-primary" %></td>
+        <td> <%= link_to "View", s3_url(doc), target: "_blank", :class => "btn btn-xs btn-primary" %></td>
       </tr>
     <% end %>
   </tbody>

@@ -21,3 +21,5 @@
 /public/uploads/
 /public/pdfs/
 /assi.pdf
+# Ignore application configuration
+/config/application.yml

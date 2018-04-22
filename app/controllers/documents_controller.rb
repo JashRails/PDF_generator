@@ -1,4 +1,5 @@
 require 'fastimage'
+require 'aws-sdk'
 
 class DocumentsController < ApplicationController
 
@@ -34,7 +35,7 @@ class DocumentsController < ApplicationController
 
       # image "#{Rails.root}/app/assets/images/1.png", :at => [0, 792], :width => 612
       image "app/assets/images/1.png", :at => [0, 792], :width => 612
-      image "public#{new_document.first_image.url}", :at => [0, 570], :width => 464, :height => 317
+      image open("#{new_document.first_image.url}"), :at => [0, 570], :width => 464, :height => 317
 
       draw_text "TheRTAStore.com Room Design", :at => [20, 752], :size => 30
       draw_text "Designed For: #{new_document.customer_name}", :at => [20, 724]
@@ -62,12 +63,12 @@ class DocumentsController < ApplicationController
           fill_color "ffffff"
 
           # fill image
-          arr = FastImage.size("public#{img.url}")
+          arr = FastImage.size("#{img.url}")
           aspect_ratio = [612.0 / arr[0], 666.0 / arr[1]].min
           width = arr[0] * aspect_ratio
           height = arr[1] * aspect_ratio
 
-          image "public#{img.url}", :at => [(612.0 - width) / 2, 719 - (666.0 - height) / 2], :width => width, :height => height
+          image open("#{img.url}"), :at => [(612.0 - width) / 2, 719 - (666.0 - height) / 2], :width => width, :height => height
         end
       end
 
@@ -80,19 +81,32 @@ class DocumentsController < ApplicationController
       # last page
       start_new_page
       image "app/assets/images/13.png", :at => [0, 792], :width => 612
-      image "public#{new_document.last_image.url}", :at => [0, 720], :width => 612, :height => 373
+      image open("#{new_document.last_image.url}"), :at => [0, 720], :width => 612, :height => 373
     end
     puts "--- Ended"
     # image "#{Prawn::DATADIR}/images/pigs.jpg", :fit => [size, size]
 
+    # Uploading to S3
+    begin
+      file_name = "#{new_document.id}_#{new_document.customer_name}.pdf"
+
+      s3 = Aws::S3::Resource.new(region: ENV['AWS_REGION'])
+      obj = s3.bucket(ENV['S3_PDF_BUCKET_NAME']).object(file_name)
+      obj.upload_file("public/pdfs/#{new_document.id}_#{new_document.customer_name}.pdf", acl:'public-read')
+      
+      # Remove local file
+      File.delete("public/pdfs/#{new_document.id}_#{new_document.customer_name}.pdf")
+    rescue Aws::S3::Errors::ServiceError
+    end
+
     redirect_to documents_path
   end
 
-  def show
-    File.open("public/pdfs/#{@document.id}_#{@document.customer_name}.pdf", 'rb') do |f|
-      send_data f.read, :type => "application/pdf", :disposition => "inline"
-    end
-  end
+  # def show
+  #   File.open("https://s3.us-east-2.amazonaws.com/rtastore-dev/70_t.pdf", 'rb') do |f|
+  #     send_data f.read, :type => "application/pdf", :disposition => "inline"
+  #   end
+  # end
 
   private
 

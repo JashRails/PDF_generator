@@ -62,13 +62,13 @@
           <div class="form-group row">
             <%= f.label :image_for_the_first_page, :class => 'col-sm-6 col-form-label' %>
             <div class="col-sm-8">
-              <%= f.file_field :first_image, :class => 'form-control col-sm-10' %>
+              <%= f.file_field :first_image, :class => 'form-control col-sm-10', :required => true %>
             </div>
           </div>
           <div class="form-group row">
             <%= f.label :image_for_the_last_page, :class => 'col-sm-6 col-form-label' %> 
             <div class="col-sm-8">
-              <%= f.file_field :last_image, :class => 'form-control col-sm-10' %>
+              <%= f.file_field :last_image, :class => 'form-control col-sm-10', :required => true %>
             </div>
           </div>
         </div>
