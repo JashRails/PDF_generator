@@ -34,7 +34,7 @@ RailsAdmin.config do |config|
     # export
     # bulk_delete
     # show
-    # edit
+    edit
     delete
     show_in_app
 
@@ -45,6 +45,18 @@ RailsAdmin.config do |config|
     config.model Document do
       list do
         field :id
+        field :customer_name
+        field :designer_name
+        field :finish_name
+        field :designer_phone
+        field :office_phone
+        field :designer_email
+        field :date
+        field :first_image
+        field :last_image
+      end
+
+      edit do
         field :customer_name
         field :designer_name
         field :finish_name

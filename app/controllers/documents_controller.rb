@@ -7,7 +7,7 @@ class DocumentsController < ApplicationController
   before_action :set_document, only: [:show]
 
   def index # show all templates
-    @documents = Document.where(user_id: current_user.id).order("CREATED_AT")
+    @documents = Document.where(user_id: current_user.id).order("CREATED_AT DESC")
   end
 
   def new
@@ -102,11 +102,9 @@ class DocumentsController < ApplicationController
     redirect_to documents_path
   end
 
-  # def show
-  #   File.open("https://s3.us-east-2.amazonaws.com/rtastore-dev/70_t.pdf", 'rb') do |f|
-  #     send_data f.read, :type => "application/pdf", :disposition => "inline"
-  #   end
-  # end
+  def show
+    redirect_to "https://s3.us-east-2.amazonaws.com/#{ENV['S3_PDF_BUCKET_NAME']}/#{@document.id}_#{@document.customer_name}.pdf"
+  end
 
   private
 
