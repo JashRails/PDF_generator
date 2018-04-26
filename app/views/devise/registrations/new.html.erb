@@ -9,6 +9,21 @@
   </div>
 
   <div class="form-group">
+    <%= f.label :name %><br />
+    <%= f.text_field :name, autocomplete: "off", required: true, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :phone %><br />
+    <%= f.text_field :phone, autocomplete: "off", required: true, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :office_phone %><br />
+    <%= f.text_field :office_phone, autocomplete: "off", required: true, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
     <%= f.label :password %>
     <% if @minimum_password_length %>
     <em>(<%= @minimum_password_length %> characters minimum)</em>

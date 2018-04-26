@@ -15,5 +15,6 @@
 //= require jquery
 //= require bootstrap-sprockets
 //= require jquery-fileupload/basic-plus
+//= require bootstrap-datepicker
 //= require moment
 //= require_tree .
