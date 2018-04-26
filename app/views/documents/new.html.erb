@@ -1,6 +1,22 @@
+<div class="container">
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-body text-center">
+          <img src="<%= image_path('process_img.gif') %>">
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+</div>
+
 <h1 class="text-center m-b-20">Create a new Document</h1>
 <%= form_for @document do |f| %>
-  
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3>Basic Information</h3>
@@ -62,13 +78,13 @@
           <div class="form-group row">
             <%= f.label :image_for_the_first_page, :class => 'col-sm-6 col-form-label' %>
             <div class="col-sm-8">
-              <%= f.file_field :first_image, :class => 'form-control col-sm-10', :required => true %>
+              <%= f.file_field :first_image, :class => 'form-control col-sm-10', :required => true, :accept => "image/*" %>
             </div>
           </div>
           <div class="form-group row">
             <%= f.label :image_for_the_last_page, :class => 'col-sm-6 col-form-label' %> 
             <div class="col-sm-8">
-              <%= f.file_field :last_image, :class => 'form-control col-sm-10', :required => true %>
+              <%= f.file_field :last_image, :class => 'form-control col-sm-10', :required => true, :accept => "image/*" %>
             </div>
           </div>
         </div>
@@ -96,12 +112,24 @@
             </div>
           </div>
           <output id="list"></output>
-          <input id="files" name="document[images][]" multiple="true" type="file" style="z-index: 10000" />
+          <input id="files" name="document[images][]" multiple="true" type="file" accept="image/*" style="z-index: 10000" />
         </div>
       </div>
 
       <script type="text/javascript">
+        // DatePicker
+        $('.datepicker').datepicker(
+          {
+            format: 'yyyy/mm/dd',
+            autoclose: true
+          }
+        );
+        $('.datepicker').datepicker("setDate", new Date());
+
+        // Drag and Drop
         var drop = $("#files");
+        var file_list = [];
+
         drop.on('dragenter', function (e) {
           $(".drop").css({
             "border": "4px dashed #09f",
@@ -120,15 +148,13 @@
           });
         });
 
-
-
         function handleFileSelect(evt) {
           var files = evt.target.files; // FileList object
 
           var list_obj = document.getElementById('list')
-          while (list_obj.firstChild) {
-            list_obj.removeChild(list_obj.firstChild);
-          }
+          // while (list_obj.firstChild) {
+          //   list_obj.removeChild(list_obj.firstChild);
+          // }
 
           // Loop through the FileList and render image files as thumbnails.
           for (var i = 0, f; f = files[i]; i++) {
@@ -137,6 +163,8 @@
             if (!f.type.match('image.*')) {
               continue;
             }
+
+            file_list.push(f);
 
             var reader = new FileReader();
 
@@ -155,23 +183,37 @@
             reader.readAsDataURL(f);
           }
         }
-
         $('#files').change(handleFileSelect);
+
+        // Form submit
+        $('.new_document').submit(function() {
+          var formData = new FormData( this );
+          var request = new XMLHttpRequest();
+          request.open("POST", "/documents");
+
+          for(i = 0; i < file_list.length; i ++)
+            formData.append("document[images][]", file_list[i]);
+          request.send(formData);
+
+          $('#myModal').modal();
+
+          request.onload = function(oEvent) {
+            if(request.status == 200) {
+              // Success
+              $('#myModal').modal('hide');
+              window.location = '/';
+            }
+            else {
+              // Failure
+              $('#myModal').modal('hide');
+              alert('Something went wrong! Please try again later.');
+            }
+          }
+          return false;
+        });
       </script>
     </div>
   </div>
 
   <%= f.submit "Submit", :class => 'btn btn-success m-b-20' %>
-
-
 <% end %>
-
-<script type="text/javascript">
-  $('.datepicker').datepicker(
-    {
-      format: 'yyyy/mm/dd',
-      autoclose: true
-    }
-  );
-  $('.datepicker').datepicker("setDate", new Date());
-</script>
