@@ -111,10 +111,14 @@
               click here to browse
             </div>
           </div>
-          <output id="list"></output>
+          <!-- <output id="list"></output> -->
           <input id="files" name="images" multiple="true" type="file" accept="image/*" style="z-index: 10000" />
         </div>
       </div>
+
+      <ul id="sortable">
+      </ul>
+
 
       <script type="text/javascript">
         // DatePicker
@@ -151,31 +155,45 @@
         function handleFileSelect(evt) {
           var files = evt.target.files; // FileList object
 
-          var list_obj = document.getElementById('list')
+          var list_obj = document.getElementById('sortable')
           // while (list_obj.firstChild) {
           //   list_obj.removeChild(list_obj.firstChild);
           // }
 
           // Loop through the FileList and render image files as thumbnails.
+          // save previous length first
+          var f_length = file_list.length;
+          var pairObj = new Object();
           for (var i = 0, f; f = files[i]; i++) {
-
             // Only process image files.
             if (!f.type.match('image.*')) {
               continue;
             }
 
             file_list.push(f);
+            pairObj[f] = i + f_length;
+
+            // console.log(file_list.length);
 
             var reader = new FileReader();
 
             // Closure to capture the file information.
             reader.onload = (function(theFile) {
+              var file_id_attr = pairObj[theFile];
               return function(e) {
                 // Render thumbnail.
-                var span = document.createElement('span');
-                span.innerHTML = ['<img class="thumb" src="', e.target.result,
-                                  '" title="', escape(theFile.name), '"/>'].join('');
-                list_obj.insertBefore(span, null);
+                var li = document.createElement('li');
+                var close_btn = document.createElement('span');
+
+                close_btn.className = 'close-btn';
+                close_btn.onclick = function() {
+                  list_obj.removeChild(li);
+                }
+
+                li.innerHTML = ['<img class="thumb" src="', e.target.result,
+                                  '" title="', escape(theFile.name), '" file_id="', file_id_attr, '"/>'].join('');
+                li.insertBefore(close_btn, null);
+                list_obj.insertBefore(li, null);
               };
             })(f);
 
@@ -191,8 +209,16 @@
           var request = new XMLHttpRequest();
           request.open("POST", "/documents");
 
-          for(i = 0; i < file_list.length; i ++)
-            formData.append("document[images][]", file_list[i]);
+          // get all available sorted image list
+          var nodes = document.getElementById('sortable').childNodes;
+
+          for(i = 0; i < nodes.length; i ++)
+          {
+            if(nodes[i].firstChild != null) {
+              file_id = parseInt(nodes[i].firstChild.getAttribute("file_id"), 10);
+              formData.append("document[images][]", file_list[file_id]);
+            }
+          }
           request.send(formData);
 
           $('#myModal').modal();
@@ -216,4 +242,10 @@
   </div>
 
   <%= f.submit "Submit", :class => 'btn btn-success m-b-20' %>
+  <script type="text/javascript">
+    $( function() {
+      $( "#sortable" ).sortable();
+      $( "#sortable" ).disableSelection();
+    } );
+  </script>
 <% end %>

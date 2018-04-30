@@ -20,6 +20,7 @@
 @import "jquery.fileupload";
 @import "jquery.fileupload-ui";
 @import "bootstrap-datepicker";
+@import "jquery-ui";
 
 .modal {
   text-align: center;
@@ -142,16 +143,44 @@ button:focus {
   right: 0;
 }
 
-#list {
+#sortable { 
+  list-style-type: none; 
+  margin: 0 5px; 
+  padding: 0; 
   width: 100%;
   text-align: left;
-  margin-left: 5px;
-  margin-right: 5px;
-  /*position: absolute;
-  left: 0;
-  top: 0;*/
 }
-#list .thumb {
+
+#sortable li { 
+  position: relative;
+  margin: 3px 3px 10px 0; 
+  padding: 1px; 
+  float: left; 
+  height: 75px; 
+  font-size: 4em; 
+  text-align: center; 
+}
+
+#sortable li:hover {
+  cursor: pointer;
+}
+
+.close-btn {
+  position: absolute;
+  top: 3px;
+  right: 0px;
+
+  color: #777;
+  font: 14px/100% arial, sans-serif;
+  text-decoration: none;
+  text-shadow: 0 1px 0 #fff;
+}
+
+.close-btn:after {
+  content: '×';
+}
+
+#sortable .thumb {
   height: 75px;
   border: 1px solid #323a44;
   margin: 10px 5px 0 0;

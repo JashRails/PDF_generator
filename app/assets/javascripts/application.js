@@ -13,6 +13,7 @@
 //= require rails-ujs
 //= require turbolinks
 //= require jquery
+//= require jquery-ui
 //= require bootstrap-sprockets
 //= require jquery-fileupload/basic-plus
 //= require bootstrap-datepicker
