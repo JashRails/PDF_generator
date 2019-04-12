@@ -34,10 +34,10 @@ class DocumentsController < ApplicationController
       fill_color "ffffff"
 
       # image "#{Rails.root}/app/assets/images/1.png", :at => [0, 792], :width => 612
-      image "app/assets/images/1.png", :at => [0, 792], :width => 612
+      image "app/assets/images/1a.png", :at => [0, 792], :width => 612
       image open("#{new_document.first_image.url}"), :at => [0, 570], :width => 464, :height => 317
 
-      draw_text "TheRTAStore.com Room Design", :at => [20, 752], :size => 30
+      draw_text "Willow Lane Cabinetry Room Design", :at => [20, 752], :size => 26
       draw_text "Designed For: #{new_document.customer_name}", :at => [20, 724]
       draw_text "Designed By: #{new_document.designer_name}", :at => [20, 702]
       draw_text "Finish Name: #{new_document.finish_name}", :at => [20, 680]
@@ -52,11 +52,11 @@ class DocumentsController < ApplicationController
           start_new_page
 
           # header - 7c131d
-          fill_color "7c131d"
+          fill_color "2db3a2"
           fill_rectangle [0, 792], 612, 73
 
           # footer - 185471
-          fill_color "185471"
+          fill_color "222222"
           fill_rectangle [0, 53], 612, 53
 
           # restore color
@@ -75,12 +75,12 @@ class DocumentsController < ApplicationController
       # 3 ~ 12 pages
       for i in 3..12
         start_new_page
-        image "app/assets/images/#{i}.png", :at => [0, 792], :width => 612
+        image "app/assets/images/#{i}a.png", :at => [0, 792], :width => 612
       end
       # start_new_page
       # last page
       start_new_page
-      image "app/assets/images/13.png", :at => [0, 792], :width => 612
+      image "app/assets/images/13a.png", :at => [0, 792], :width => 612
       image open("#{new_document.last_image.url}"), :at => [0, 720], :width => 612, :height => 373
     end
     puts "--- Ended"
