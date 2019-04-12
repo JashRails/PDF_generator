@@ -51,7 +51,7 @@ class DocumentsController < ApplicationController
         new_document.images.each do |img|
           start_new_page
 
-          # header - 7c131d
+          # header - 7c131d color changed for willow shop
           fill_color "2db3a2"
           fill_rectangle [0, 792], 612, 73
 
